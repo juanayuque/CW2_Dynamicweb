@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>MyBlog</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        header {
+            background-color: #313a42; /* Light Grey Color */
+        }
+        .navbar-nav .nav-link {
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            padding: 10px 20px; /* Increased padding for bigger button appearance */
+        }
+    </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+    <header class="text-center py-2">
+        <h1 class="mb-0">Bloggin'</h1>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-2"><a class="nav-link" href="/" style="font-size: 1.2em; color: white;">Home</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="/projects" style="font-size: 1.2em; color: white;">Projects</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="/travels" style="font-size: 1.2em; color: white;">Travels</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="/explore" style="font-size: 1.2em; color: white;">Explore</a></li>
+                    <!-- Conditional links based on user's login status -->
+                    {% if current_user is defined and current_user.is_authenticated %}
+                        <li class="nav-item mx-2"><a class="nav-link" href="{{ url_for('dashboard') }}" style="font-size: 1.2em; color: white;">Settings</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{{ url_for('logout') }}" style="font-size: 1.2em; color: white;">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item mx-2"><a class="nav-link" href="{{ url_for('login') }}" style="font-size: 1.2em; color: white;">Login</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{{ url_for('register') }}" style="font-size: 1.2em; color: white;">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    
+
+    <main class="container py-10">
+        {% if current_user is defined and current_user.is_authenticated %}
+            <h2>Hello, {{ current_user.username }}!</h2>
+        {% else %}
+            <h2>Hello guest!</h2>
+        {% endif %}
+    
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+
+
+    <footer class="bg-dark text-white mt-4">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col text-center">
+                    <h6>Created by Juan Ayuque, 2024</h6>
+                    <p>Follow me on social media</p>
+                    <a href="https://www.linkedin.com/in/juan-andres-ayuque-arenas-990243b4/" class="text-white mr-2" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://www.instagram.com/juanayuque" class="text-white mr-2" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="https://twitter.com/anonimo" class="text-white" target="_blank"><i class="fabfa-twitter"></i> Twitter</a>
+                </div>
+                </div>
+                </div>
+                </footer>
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

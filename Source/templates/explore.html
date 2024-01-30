@@ -1,0 +1,62 @@
+<!-- templates/explore.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .post-item {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .post-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+</style>
+
+<section class="container">
+    <h2>All Posts</h2>
+
+    <div class="filter-form mb-3">
+        <form action="/explore" method="GET" class="form-inline">
+            <label for="filter-order" class="mr-2">Order By:</label>
+            <select name="filter-order" id="filter-order" class="form-control mr-2">
+                <option value="recent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="size-asc">Size Ascending</option>
+                <option value="size-desc">Size Descending</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
+    </div>
+
+    <div class="row">
+        {% for post in all_posts %}
+            <div class="col-md-6 mb-3">
+                <div class="post-item">
+                    {% if post[2] %}  <!-- third element is image_path -->
+                        <img src="{{ url_for('static', filename=post[2]) }}" alt="Post Image" class="img-fluid">
+                    {% endif %}
+                    <div class="post-text">
+                        <p>{{ post[1] }}  <!-- second element is post_text --></p>
+                    </div>
+                    <div class="post-info">
+                        <strong>Author:</strong> {{ post[5] or 'Guest' }}  <!--  sixth element is username -->
+                        {% if current_user.is_authenticated and (post[4] is none or post[4] == 'YourGuestIdentifier') %}
+                            <!-- Delete button for guest posts -->
+                            <form action="{{ url_for('delete_post', post_id=post[0]) }}" method="POST">
+                                {{ form.csrf_token() }}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

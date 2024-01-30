@@ -1,0 +1,78 @@
+<!-- templates/front_1.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .post-section {
+        background-color: #f8f9fa; /* Light grey background */
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .post-item {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .post-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    .social-share a {
+        margin-right: 10px;
+    }
+</style>
+
+<section class="post-section">
+    <h3>Write a New Post</h3>
+    <form action="/post" method="POST" enctype="multipart/form-data" id="postForm" name="postForm">
+        {{ form.hidden_tag() }}
+
+        <textarea name="postText" id="postText" placeholder="Write your post here..." rows="10" cols="50" class="form-control mb-2"></textarea>
+
+        <label for="category">Category:</label>
+        <select name="category" id="category" class="form-control mb-2">
+            <option value="Projects">Projects</option>
+            <option value="Travel">Travel</option>
+        </select>
+
+        <label for="image">Upload Image:</label>
+        <input type="file" name="image" id="image" class="form-control mb-2">
+
+        <input type="submit" value="Post" class="btn btn-primary"/>
+    </form>
+</section>
+
+<div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flashes alert {% if 'success' in message %}alert-success{% elif 'error' in message %}alert-danger{% endif %} text-center" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<section class="post-section">
+    <h3>Latest Posts</h3>
+    {% for post in latest_posts %}
+        <div class="post-item">
+            <strong>Post:</strong> {{ post[1] }} <!-- post_text -->
+            {% if post[2] %} <!-- image_path -->
+                <img src="{{ url_for('static', filename=post[2]) }}" alt="Post Image">
+            {% endif %}
+            <p><strong>Author:</strong> {{ post[4] or 'Guest User' }}</p> <!-- Author's username or 'Anonymous' -->
+
+            <!-- Social Media Share Buttons -->
+            <div class="social-share">
+                <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20cool%20post%20in%20https://cmt120-webapp.apps.containers.cs.cf.ac.uk" target="_blank">Share on Twitter</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://cmt120-webapp.apps.containers.cs.cf.ac.uk" target="_blank">Share on Facebook</a>
+                </div>
+                </div>
+                {% endfor %}
+                
+                </section>
+                {% endblock %}

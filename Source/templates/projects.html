@@ -1,0 +1,30 @@
+<!-- templates/projects.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="post-section">
+    <h3>Latest Projects made by users</h3>
+    <div>
+        {% for post in project_posts %}
+            {% if post[4] %} <!-- Check if there is a user_id -->
+                <div class="post-item">
+                    <strong>Post:</strong> {{ post[1] }} <!-- post_text -->
+                    {% if post[2] %} <!-- image_path -->
+                        <img src="{{ url_for('static', filename=post[2]) }}" alt="Project Image">
+                    {% endif %}
+                    <p><strong>Author:</strong> {{ post[5] }}</p> <!-- Author's username -->
+                    {% if current_user.is_authenticated and current_user.id == post[4] %}
+                        <!-- Delete button -->
+                        <form action="{{ url_for('delete_post', post_id=post[0]) }}" method="POST">
+                            {{ form.csrf_token() }}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

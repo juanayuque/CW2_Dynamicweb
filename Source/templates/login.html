@@ -1,0 +1,40 @@
+<!-- templates/login.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="centered-form-container">
+    <div class="centered-form">
+        <h2>Login</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if current_user.is_authenticated %}
+            <p>You are already logged in as {{ current_user.username }}.</p>
+            <p><a href="{{ url_for('dashboard') }}">Go to Dashboard</a></p>
+        {% else %}
+            <form method="post" action="{{ url_for('login') }}">
+                {{ form.hidden_tag() }}
+                <p>
+                    <label for="username">{{ form.username.label }}</label>
+                    {{ form.username }}
+                </p>
+                <p>
+                    <label for="password">{{ form.password.label }}</label>
+                    {{ form.password }}
+                </p>
+                <p><input type="submit" value="Login"></p>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
